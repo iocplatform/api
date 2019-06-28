@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	v1 "github.com/iocplatform/api/gen/go/platform/v1"
+	v1 "github.com/iocplatform/gen/go/platform/v1"
 	grpc "google.golang.org/grpc"
 	math "math"
 )

@@ -4,7 +4,7 @@ protoc:
 lint:
   group: uber2
   file_header:
-    path: LICENSE
+    path: ../LICENSE
   java_package_prefix: org.zenithar.iocplatform.api
 
 generate:
@@ -14,8 +14,8 @@ generate:
     - name: gogo
       type: gogo
       flags: plugins=grpc
-      output: ./gen/gogo
+      output: ../gen/gogo
     - name: go
       type: go
       flags: plugins=grpc
-      output: ./gen/go
+      output: ../gen/go
