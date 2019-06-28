@@ -33,11 +33,15 @@ option objc_class_prefix = "PXX";
 option php_namespace = "Platform\\V1";
 
 // TLPLevel defines Traffic Light Protocol level enumeration.
+// More informations (https://www.circl.lu/pub/traffic-light-protocol/)
 enum TLPLevel {
   TLP_LEVEL_INVALID = 0;
+  // Disclosure not limited.
   TLP_LEVEL_WHITE = 1;
+  // Limited disclosure, restricted to the communitity.
   TLP_LEVEL_GREEN = 2;
+  // Limited disclosure, restricted to participant's organizations.
   TLP_LEVEL_AMBER = 3;
+  // Not for disclosure, restricted to participants only.
   TLP_LEVEL_RED = 4;
-  TLP_LEVEL_BLACK = 5;
 }
