@@ -1,0 +1,21 @@
+protoc:
+  version: 3.8.0
+
+lint:
+  group: uber2
+  file_header:
+    path: LICENSE
+  java_package_prefix: org.zenithar.iocplatform.api
+
+generate:
+  go_options:
+    import_path: github.com/iocplatform/api
+  plugins:
+    - name: gogo
+      type: gogo
+      flags: plugins=grpc
+      output: ./gen/gogo
+    - name: go
+      type: go
+      flags: plugins=grpc
+      output: ./gen/go

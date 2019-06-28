@@ -1,0 +1,188 @@
+// MIT License
+//
+// Copyright (c) 2019 Thibault NORMAND
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+syntax = "proto3";
+
+package platform.v1;
+
+option csharp_namespace = "Platform.V1";
+option go_package = "platformv1";
+option java_multiple_files = true;
+option java_outer_classname = "ObjectProto";
+option java_package = "org.zenithar.iocplatform.api.platform.v1";
+option objc_class_prefix = "PXX";
+option php_namespace = "Platform\\V1";
+
+import "google/protobuf/any.proto";
+import "platform/v1/component.proto";
+
+// ObjectType enumerates all object types supported by the platform.
+enum ObjectType {
+  // Default value when no enumeration is specified.
+  OBJECT_TYPE_INVALID = 0;
+  // Explicitly Unknown object value.
+  OBJECT_TYPE_UNKNOWN = 1;
+  OBJECT_TYPE_ARTIFACT = 2;
+  OBJECT_TYPE_AUTONOMOUS_SYSTEM = 3;
+  OBJECT_TYPE_DIRECTORY = 4;
+  OBJECT_TYPE_DOMAIN_NAME = 5;
+  OBJECT_TYPE_EMAIL_ADDRESS = 6;
+  OBJECT_TYPE_EMAIL_MESSAGE = 7;
+  OBJECT_TYPE_FILE = 8;
+  OBJECT_TYPE_IPV4 = 9;
+  OBJECT_TYPE_IPV6 = 10;
+  OBJECT_TYPE_MAC_ADDRESS = 11;
+  OBJECT_TYPE_MUTEX = 12;
+  OBJECT_TYPE_URL = 13;
+}
+
+// Object describes an observable.
+message Object {
+  ObjectType type = 1;
+  google.protobuf.Any extensions = 2;
+  oneof object {
+    Artifact artifact = 3;
+    AutonomousSystem as = 4;
+    Directory directory = 5;
+    DomainName domain_name = 6;
+    EmailAddress email_address = 7;
+    EmailMessage email_message = 8;
+    File file = 9;
+    IPv4 ipv4 = 10;
+    IPv6 ipv6 = 11;
+    MacAddress mac_address = 12;
+    Mutex mutex = 13;
+    URL url = 14;
+  }
+}
+
+// -----------------------------------------------------------------------------
+
+// The Artifact Object permits capturing an array of bytes (8-bits), as a
+// base64-encoded string, or linking to a file-like payload.
+message Artifact {
+  string mime_type = 1;
+  string payload_bin = 2;
+  string url = 3;
+  map<string, string> hashes = 4;
+}
+
+// The AS object represents the properties of an Autonomous System (AS).
+message AutonomousSystem {
+  uint64 number = 1;
+  string name = 2;
+  string rir = 3;
+}
+
+// The Directory Object represents the properties common to a file system
+// directory.
+message Directory {
+  string path = 1;
+  string path_enc = 2;
+  uint64 created = 3;
+  uint64 modified = 4;
+  uint64 accessed = 5;
+  repeated string contains_refs = 6;
+}
+
+// The Domain Name represents the properties of a network domain name.
+message DomainName {
+  string value = 1;
+  repeated string resolves_to_refs = 2;
+}
+
+// The Email Address Object represents a single email address.
+message EmailAddress {
+  string value = 1;
+  string display_name = 2;
+  string belongs_to_ref = 3;
+}
+
+// The Email Message Object represents an instance of an email message,
+// corresponding to the internet message format described in [RFC5322] and
+// related RFCs.
+message EmailMessage {
+  bool is_multipart = 1;
+  uint64 date = 2;
+  string content_type = 3;
+  string from_ref = 4;
+  string sender_ref = 5;
+  repeated string to_refs = 6;
+  repeated string cc_refs = 7;
+  repeated string bcc_refs = 8;
+  string subject = 9;
+  repeated string received_lines = 10;
+  map<string, string> additional_header_fields = 11;
+  string body = 12;
+  repeated EmailMime body_multipart = 13;
+  string raw_email_ref = 14;
+}
+
+// The File Object represents the properties of a file.
+message File {
+  map<string, string> hashes = 1;
+  uint64 size = 2;
+  string name = 3;
+  string name_enc = 4;
+  string magic_number_hex = 5;
+  string mime_type = 6;
+  uint64 created = 7;
+  uint64 modified = 8;
+  uint64 accessed = 9;
+  string parent_directory_ref = 10;
+  bool is_encrypted = 11;
+  string encryption_algorithm = 12;
+  string decryption_key = 13;
+  repeated string contains_refs = 14;
+  string content_ref = 15;
+}
+
+// The IPv4 Address Object represents one or more IPv4 addresses expressed
+// using CIDR notation.
+message IPv4 {
+  string value = 1;
+  repeated string resolves_to_refs = 2;
+  string belongs_to_ref = 3;
+}
+
+// The IPv6 Address Object represents one or more IPv6 addresses expressed using
+// CIDR notation.
+message IPv6 {
+  string value = 1;
+  repeated string resolves_to_refs = 2;
+  string belongs_to_ref = 3;
+}
+
+// The MAC Address Object represents a single Media Access Control (MAC) address.
+message MacAddress {
+  string value = 1;
+}
+
+// The Mutex Object represents the properties of a mutual exclusion (mutex) object.
+message Mutex {
+  string name = 1;
+}
+
+// The URL Object represents the properties of a uniform resource locator (URL).
+message URL {
+  string value = 1;
+}
